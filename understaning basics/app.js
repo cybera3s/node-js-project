@@ -13,7 +13,15 @@ const http = require('http');
 // approach 3
 
 const server = http.createServer((req, res) => {
-    console.log(req)
+    // console.log(req.url, req.method, req.headers);
+    // process.exit();
+    res.setHeader('Content-Type', 'text/html')
+    res.write('<html>')
+    res.write('<head><title>App Node JS</title></head>')
+    res.write('<body><h1>Hello ario</h1></body>')
+    res.write('</html>')
+    res.end();
+
 });
 
 server.listen(3000);
