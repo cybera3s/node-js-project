@@ -1,0 +1,13 @@
+{
+  "name": "node-js-udemy",
+  "version": "1.0.0",
+  "description": "complete node js guide",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "start-server": "node app.js",
+  },
+  "author": "Ario",
+  "license": "ISC"
+}
