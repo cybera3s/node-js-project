@@ -20,6 +20,11 @@ app.use(adminRoutes);
 app.use(shopRoutes);
 
 
+// handle invalid routes
+app.use((req, res, nect) => {
+    res.status(404).send('<h1>Page Not Found!</h1>')
+});
+
 app.listen(3000, () => {
     console.log('listening on port 3000...')
 
