@@ -23,12 +23,11 @@ app.use(shopRoutes);
 
 
 // handle invalid routes
-app.use((req, res, nect) => {
+app.use((req, res, next) => {
     res.status(404).sendFile(path.join(__dirname, 'views', '404.html'))
 });
 
 app.listen(3000, () => {
     console.log('listening on port 3000...')
-
 });
 
