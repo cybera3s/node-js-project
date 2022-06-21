@@ -9,7 +9,8 @@ const router = express.Router();
 
 router.get('/', (req, res, next) => {
     console.log("shopjs: ", adminData.products)
-    res.sendFile(path.join(rootdir, 'views', 'shop.html'));
+    // res.sendFile(path.join(rootdir, 'views', 'shop.html'));
+    res.render('shop')
 });
 
 module.exports = router;
