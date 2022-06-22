@@ -9,12 +9,18 @@
 const path = require('path');
 
 const express = require('express');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const hbs = require('express-handlebars');
+const engine = hbs.create({ defaultLayout: false})
+
 
 const app = express();
 
 // template engine config
-app.set('view engine', 'pug');
+
+// app.set('view engine', 'pug');
+app.engine('hbs', engine.engine)
+app.set('view engine', 'hbs');
 app.set('views', 'views');
 
 
@@ -30,7 +36,10 @@ app.use(shopRoutes);
 
 // handle invalid routes
 app.use((req, res, next) => {
-    res.status(404).render('404', {pageTitle: "404 Page"})
+    res.status(404).render('404', 
+        {
+            pageTitle: "404 Page",
+    });
     // sendFile(path.join(__dirname, 'views', '404.html'))
 });
 
