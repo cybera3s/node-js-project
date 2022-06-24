@@ -10,21 +10,21 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const hbs = require('express-handlebars');
-const engine = hbs.create({ 
-    layoutsDir: "views/layouts/",
-    defaultLayout: "main-layout",
-    extname: 'hbs'
-});
+// const hbs = require('express-handlebars');
+
 
 
 const app = express();
 
 // template engine config
-
+// const engine = hbs.create({ 
+//     layoutsDir: "views/layouts/",
+//     defaultLayout: "main-layout",
+//     extname: 'hbs '
+// });
 // app.set('view engine', 'pug');
-app.engine('hbs', engine.engine)
-app.set('view engine', 'hbs');
+// app.engine('hbs', engine.engine)
+app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 
