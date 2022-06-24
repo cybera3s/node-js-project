@@ -11,7 +11,11 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const hbs = require('express-handlebars');
-const engine = hbs.create({ defaultLayout: false})
+const engine = hbs.create({ 
+    layoutsDir: "views/layouts/",
+    defaultLayout: "main-layout",
+    extname: 'hbs'
+});
 
 
 const app = express();
