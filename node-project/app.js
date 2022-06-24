@@ -1,11 +1,3 @@
-// const routes = require('./routes');
-// const http = require('http');
-
-// const server = http.createServer(app);
-// server.listen(3000, ()=>{
-//     console.log('listening on port 3000...')
-// });
-
 const path = require('path');
 
 const express = require('express');
@@ -19,13 +11,13 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 
-const adminData = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop')
 
 // Middlewares
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/admin', adminData.routes);
+app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
 
