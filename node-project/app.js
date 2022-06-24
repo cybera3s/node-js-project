@@ -10,20 +10,11 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
-// const hbs = require('express-handlebars');
-
-
 
 const app = express();
 
 // template engine config
-// const engine = hbs.create({ 
-//     layoutsDir: "views/layouts/",
-//     defaultLayout: "main-layout",
-//     extname: 'hbs '
-// });
-// app.set('view engine', 'pug');
-// app.engine('hbs', engine.engine)
+
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
@@ -44,7 +35,6 @@ app.use((req, res, next) => {
         {
             pageTitle: "404 Page",
     });
-    // sendFile(path.join(__dirname, 'views', '404.html'))
 });
 
 app.listen(3000, () => {
