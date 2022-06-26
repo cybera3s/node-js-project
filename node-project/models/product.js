@@ -33,6 +33,17 @@ module.exports = class Product {
     }
 
     static fetchAll() {
-        return products;
+        const p = path.join(
+            path.dirname(process.mainModule.filename),
+            'data',
+            'products.json'
+        );
+        fs.readFile(p, (err, fileContent) => {
+            if (err) {
+                return [];
+            }
+            return JSON.parse(fileContent);
+        });
+
     }
 }
