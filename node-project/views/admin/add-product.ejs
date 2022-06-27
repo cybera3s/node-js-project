@@ -10,9 +10,25 @@
 
     <main>
         <form class="product-form" action="/admin/add-product" method="POST">
+            
             <div class="form-control">
                 <label for="title">Title</label>
                 <input type="text" id="title" name="title">
+            </div>
+
+            <div class="form-control">
+                <label for="imageUrl">Image URL</label>
+                <input type="text" id="imageUrl" name="imageUrl">
+            </div>
+
+            <div class="form-control">
+                <label for="price">Price</label>
+                <input type="number" id="price" name="price">
+            </div>
+
+            <div class="form-control">
+                <label for="description">Description</label>
+                <textarea style="width: 100%;" type="number" id="description" name="description" rows="5"></textarea>
             </div>
 
             <input type="submit" value="Add">
