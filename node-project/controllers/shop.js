@@ -43,7 +43,7 @@ exports.getCart = (req, res, next) => {
         Product.fetchAll(products => {
             const cartProducts = []
 
-            for (product of products){
+            for (let product of products){
 
                 const cartProductData = cart.products.find(prod => prod.id === product.id);
 
