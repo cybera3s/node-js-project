@@ -1,12 +1,27 @@
 <%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/css/main.css">
 
-</head>
-<body>
-    <%- include('../includes/navigation.ejs') %>
+    </head>
 
-    <main>
-        <h1>Cart</h1>
-    </main>
+    <body>
+        <%- include('../includes/navigation.ejs') %>
 
-    <%- include('../includes/end.ejs') %>
+            <main>
+                <% if (products.length> 0) { %>
+                    <ul>
+                        <% products.forEach(p=> { %>
+
+                            <li>
+                                <%= p.productData.title %> (<%= p.qty %>)
+                            </li>
+
+                            <% }) %>
+                    </ul>
+                    <% } else {%>
+                        <h1 style="background-color:lightyellow;">
+                            No Products In Cart!
+                        </h1>
+                        <% } %>
+            </main>
+
+            <%- include('../includes/end.ejs') %>
