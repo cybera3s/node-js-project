@@ -1,3 +1,5 @@
 **/node_modules/
 .idea
 **/.vscode
+**/cart.json
+**/products.json
