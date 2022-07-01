@@ -2,3 +2,4 @@
 .idea
 **/.vscode
 data/
+node-project/data/cart.json
