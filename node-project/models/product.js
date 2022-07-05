@@ -1,5 +1,5 @@
 // imports
-
+const db = require('../util/database');
 const Cart = require('./cart');
 
 // declarations
@@ -27,11 +27,11 @@ module.exports = class Product {
 
     }
 
-    static fetchAll(callback) {
-        
+    static fetchAll() {
+        return db.execute('SELECT * FROM products;')
     }
 
-    static findById(id, callback) {
+    static findById(id) {
        
     }
 }
