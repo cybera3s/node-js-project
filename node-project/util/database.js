@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize(
     'node_complete',
-    'root',
+    'ario',
     'S@j_06029842',
     {
     dialect: 'mysql',
