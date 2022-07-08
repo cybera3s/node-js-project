@@ -14,20 +14,20 @@ exports.postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-    Product.create({
-      title: title,
-      price: price,
-      imageUrl: imageUrl,
-      description: description
-    })
-    .then(result => {
+  Product.create({
+    title: title,
+    price: price,
+    imageUrl: imageUrl,
+    description: description,
+  })
+    .then((result) => {
       console.log("Product Created!");
-      res.redirect('/admin/products');
+      res.redirect("/admin/products");
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
-  };
+};
 
 exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.edit;
