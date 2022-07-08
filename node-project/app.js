@@ -23,7 +23,14 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
-
+app.use((req, res, next) => {
+    User.findByPk(1)
+        .then((user) => {
+            req.user = user;
+            next();
+        })
+        .catch(err => console.log(err));
+})
 
 // handle 404 page
 app.use(errorController.get404);
@@ -32,15 +39,30 @@ app.use(errorController.get404);
 Product.belongsTo(User, {constraints: true, onDelete: 'CASCADE'});
 User.hasMany(Product);
 
+sequelize
+    // .sync({ force: true })
+    .sync()
+    .then(result => {
+        // console.log(result)
+        return User.findByPk(1)
+    })
+    .then(user => {
+        if (!user){
+            return User.create({name: 'Ario', email: 'cybera.3s@gmail.com'})
+        }
+        return user;
+    })
+    .then(user => {
 
-sequelize.sync({ force: true }).then(result => {
-    // console.log(result)
-    app.listen(3000, () => {
-        console.log('listening on port 3000...')
+        // console.log(user);
+
+        app.listen(3000, () => {
+            console.log('listening on port 3000...')
+        });
+
+    }).catch(err => {
+        console.log(err);
     });
-}).catch(err => {
-    console.log(err);
-});
 
 
 
