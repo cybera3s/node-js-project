@@ -52,19 +52,32 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postEditProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  const updatedTitle = req.body.title;
-  const updatedPrice = req.body.price;
-  const updatedImageUrl = req.body.imageUrl;
-  const updatedDescription = req.body.description;
-  const updateProduct = new Product(
-    prodId,
-    updatedTitle,
-    updatedImageUrl,
-    updatedDescription,
-    updatedPrice
-  );
-  updateProduct.save();
-  res.redirect("/admin/products");
+
+  Product.findByPk(prodId)
+    .then((product) => {
+      product.update({
+        title: req.body.title,
+        price: req.body.price,
+        imageUrl: req.body.imageUrl,
+        description: req.body.description,
+      });
+      res.redirect("/admin/products");
+    })
+    .catch((err) => console.log(err));
+
+  // .catch(err => console.log(err));
+  // const updatedTitle = req.body.title;
+  // const updatedPrice = req.body.price;
+  // const updatedImageUrl = req.body.imageUrl;
+  // const updatedDescription = req.body.description;
+  // const updateProduct = new Product(
+  //   prodId,
+  //   updatedTitle,
+  //   updatedImageUrl,
+  //   updatedDescription,
+  //   updatedPrice
+  // );
+  // updateProduct.save();
 };
 
 exports.postDeleteProduct = (req, res, next) => {
