@@ -13,14 +13,15 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-
-  Product.create({
+  
+  // create a product with relation user
+  req.user.createProduct({
     title: title,
     price: price,
     imageUrl: imageUrl,
     description: description,
   })
-    .then((result) => {
+   .then((result) => {
       console.log("Product Created!");
       res.redirect("/admin/products");
     })
