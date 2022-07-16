@@ -8,14 +8,18 @@
 
             <main>
                 <% if (products.length> 0) { %>
-                    <ul>
+                    <ul class="row w-75 mx-auto">
                         <% products.forEach(p=> { %>
 
-                            <li>
-                                <p><%= p.productData.title %> (<%= p.qty %>)</p>
-                                <form action="/cart-delete-item" method="post" >
-                                    <button type="submit">Delete</button>
-                                    <input type="hidden" name="productId" value="<%=p.productData.id%>">
+                            <li class="d-flex mt-2 justify-content-between shadow align-items-center">
+                                <h1>
+                                    <%= p.title %>
+                                </h1>
+                                <h2>Quantity: <%= p.cartItem.quantity %>
+                                </h2>
+                                <form action="/cart-delete-item" method="post">
+                                    <button class="btn btn-danger" type="submit">Delete</button>
+                                    <input type="hidden" name="productId" value="<%=p.id%>">
                                 </form>
                             </li>
 
