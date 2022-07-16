@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use((req, res, next) => {
   User.findByPk(1)
     .then((user) => {
-      console.log(user);
+      // console.log(user);
       req.user = user;
       next();
     })
@@ -48,11 +48,9 @@ Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
 
-
-
 sequelize
-  .sync({ force: true })
-  // .sync()
+  // .sync({ force: true })
+  .sync()
   .then((result) => {
     // console.log(result)
     return User.findByPk(1);
@@ -65,7 +63,9 @@ sequelize
   })
   .then((user) => {
     // console.log(user);
-
+    return user.createCart();
+  })
+  .then((cart) => {
     app.listen(3000, () => {
       console.log("listening on port 3000...");
     });
