@@ -17,14 +17,23 @@
                                 </h1>
                                 <h2>Quantity: <%= p.cartItem.quantity %>
                                 </h2>
-                                <form action="/cart-delete-item" method="post">
-                                    <button class="btn btn-danger" type="submit">Delete</button>
-                                    <input type="hidden" name="productId" value="<%=p.id%>">
-                                </form>
+                                <div class="text-center">
+                                    <form action="/cart-delete-item" method="post">
+                                        <button class="btn btn-danger" type="submit">Delete</button>
+                                        <input type="hidden" name="productId" value="<%=p.id%>">
+                                    </form>
+                                </div>
                             </li>
 
                             <% }) %>
                     </ul>
+
+                    <div class="centered mt-2">
+                        <form action="/create-order" method="post">
+                            <button type="submit" class="btn btn-primary">Order Now!</button>
+                        </form>
+                    </div>
+
                     <% } else {%>
                         <h1 style="background-color:lightyellow;">
                             No Products In Cart!
