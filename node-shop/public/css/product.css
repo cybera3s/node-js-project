@@ -44,6 +44,12 @@ input[type="submit"]:active{
 .product-item {
     width: 20rem;
     max-width: 95%;
+    box-shadow: 1px 1px 20px #d79e9e;
+    transition: all 250ms ease-in-out ;
+}
+
+.product-item:hover{
+    transform: scale(1.02);
 }
 
 .product__title {
