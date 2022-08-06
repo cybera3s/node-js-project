@@ -15,12 +15,12 @@
                                 <h1>
                                     <%= p.title %>
                                 </h1>
-                                <h2>Quantity: <%= p.cartItem.quantity %>
+                                <h2>Quantity: <%= p.quantity %>
                                 </h2>
                                 <div class="text-center">
                                     <form action="/cart-delete-item" method="post">
                                         <button class="btn btn-danger" type="submit">Delete</button>
-                                        <input type="hidden" name="productId" value="<%=p.id%>">
+                                        <input type="hidden" name="productId" value="<%=p._id%>">
                                     </form>
                                 </div>
                             </li>

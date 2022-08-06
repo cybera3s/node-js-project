@@ -1,12 +1,14 @@
 const path = require("path");
 
-require('dotenv').config()
+require("dotenv").config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
 const errorController = require("./controllers/error");
 
 const mongoConnect = require("./util/database").mongoConnect;
+const User = require("./models/user");
+
 const app = express();
 
 // template engine config
@@ -21,16 +23,15 @@ const shopRoutes = require("./routes/shop");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// // add user to request
-// app.use((req, res, next) => {
-//   // User.findByPk(1)
-//   //   .then((user) => {
-//   //     // console.log(user);
-//   //     req.user = user;
-//   //     next();
-//   //   })
-//   //   .catch((err) => console.log(err));
-// });
+// add user to request
+app.use((req, res, next) => {
+  User.findById("62ed4862785e1de7733997e7")
+    .then((user) => {
+      req.user = new User(user.username, user.email, user.cart, user._id);
+      next();
+    })
+    .catch((err) => console.log(err));
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -38,15 +39,10 @@ app.use(shopRoutes);
 // handle 404 page
 app.use(errorController.get404);
 
-const PORT = 3000
+const PORT = 3000;
 
 mongoConnect(() => {
   app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`);
   });
 });
-
-
-
-
-
