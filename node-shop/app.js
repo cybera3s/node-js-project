@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // add user to request
 app.use((req, res, next) => {
-  User.findById("62f11a4cfdaa1c36b0910515")
+  User.findById("62f1208a797503c96a62d09b")
     .then((user) => {
       req.user = user;
       next();
