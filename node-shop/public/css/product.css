@@ -66,3 +66,8 @@ input[type="submit"]:active{
 .product__description {
     text-align: center;
 }
+
+.product__image {
+    width: 400px;
+    height: 400px;
+}
