@@ -25,14 +25,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // add user to request
-// app.use((req, res, next) => {
-//   User.findById("62ed4862785e1de7733997e7")
-//     .then((user) => {
-//       req.user = new User(user.username, user.email, user.cart, user._id);
-//       next();
-//     })
-//     .catch((err) => console.log(err));
-// });
+app.use((req, res, next) => {
+  User.findById("62f11a4cfdaa1c36b0910515")
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -45,6 +45,19 @@ const PORT = 3000;
 mongoose
   .connect(process.env.MONGODB_URL)
   .then((result) => {
+    User.findOne().then((user) => {
+      if (!user) {
+        const user = new User({
+          name: "Ario",
+          email: "cybera.3s@gmail.com",
+          cart: {
+            items: [],
+          },
+        });
+        user.save();
+      }
+    });
+
     app.listen(PORT, () => {
       console.log(`Listening on ${PORT}`);
     });
