@@ -19,6 +19,7 @@ exports.postAddProduct = (req, res, next) => {
     price: price,
     imageUrl: imageUrl,
     description: description,
+    userId: req.user,
   });
 
   product
@@ -63,13 +64,13 @@ exports.postEditProduct = (req, res, next) => {
   const updatedDescription = req.body.description;
 
   Product.findById(prodId)
-    .then(product => {
+    .then((product) => {
       product.title = updatedTitle;
       product.price = updatedPrice;
       product.description = updatedDescription;
       product.imageUrl = updatedImageUrl;
-      return product.save()
-  })
+      return product.save();
+    })
     .then((result) => {
       res.redirect("/admin/products");
     })
