@@ -1,0 +1,30 @@
+<%- include('../includes/head.ejs') %>
+    <!-- <link rel="stylesheet" href="/css/main.css"> -->
+
+    </head>
+
+    <body>
+
+        <%- include('../includes/navigation.ejs') %>
+
+
+            <main class="row">
+                <form class="login-form mx-auto col-12 col-sm-11 col-md-8 col-lg-6 col-xl-4" action="/login/"
+                    method="POST">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                            placeholder="Email Address Here">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="Password Here">
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Login</button>
+                </form>
+            </main>
+
+            <%- include('../includes/end.ejs') %>
