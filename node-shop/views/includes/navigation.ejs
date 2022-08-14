@@ -28,18 +28,22 @@
                     Orders
                 </a>
             </li>
-
-            <!-- <li  class="main_header__item">
+            
+            <% if (isAuthenticated) { %>
+                
+            <li  class="main_header__item">
                 <a class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product">
                     Add Product
                 </a>
-            </li> -->
+            </li>
 
-            <!-- <li  class="main_header__item">
+            <li  class="main_header__item">
                 <a class="<%= path === '/admin/products' ? 'active' : '' %>" href="/admin/products">
                     Admin Products
                 </a>
-            </li> -->
+            </li>
+
+            <% } %>
 
         </ul>
         <ul class="main_header__item_list">
