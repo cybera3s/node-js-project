@@ -45,19 +45,23 @@
                 <% } %>
 
         </ul>
-        <% if (!isAuthenticated) { %>
 
-            <ul class="main_header__item_list">
+        <ul class="main_header__item_list">
+            <% if (!isAuthenticated) { %>
+
                 <li class="main_header__item">
                     <a class="<%= path === '/login' ? 'active' : '' %>" href="/login">Login</a>
                 </li>
+
+            <% } else { %>
+
                 <li class="main_header__item">
                     <form action="/logout" method="post">
                         <button type="submit">Logout</button>
                     </form>
                 </li>
-            </ul>
-            
-        <% } %>
+            <% } %>
+        </ul>
+
     </nav>
 </header>
