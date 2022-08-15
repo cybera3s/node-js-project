@@ -45,7 +45,7 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  req.session.user
+  req.user
     .populate("cart.items.productId")
     .then((user) => {
       const products = user.cart.items;
@@ -65,7 +65,7 @@ exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
   Product.findById(prodId)
     .then((product) => {
-      return req.session.user.addToCart(product);
+      return req.user.addToCart(product);
     })
     .then((result) => {
       res.redirect("/cart");
@@ -76,7 +76,7 @@ exports.postCart = (req, res, next) => {
 exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
 
-  req.session.user
+  req.user
     .removeFromCart(prodId)
     .then((result) => {
       res.redirect("/cart");
@@ -85,7 +85,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 exports.postOrder = (req, res, next) => {
-  req.session.user
+  req.user
     .populate("cart.items.productId")
     .then((user) => {
       const products = user.cart.items.map((i) => {
@@ -95,7 +95,7 @@ exports.postOrder = (req, res, next) => {
       const order = new Order({
         user: {
           name: req.user.name,
-          userId: req.session.user,
+          userId: req.user,
         },
         products: products,
       });
@@ -103,7 +103,7 @@ exports.postOrder = (req, res, next) => {
       return order.save();
     })
     .then((result) => {
-      req.session.user.clearCart();
+      req.user.clearCart();
     })
     .then((result) => {
       res.redirect("/orders");
@@ -112,7 +112,7 @@ exports.postOrder = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
-  Order.find({ "user._id": req.session.user._id })
+  Order.find({ "user._id": req.user._id })
     .populate("products.product")
     .then((orders) => {
       res.render("shop/orders", {
