@@ -3,6 +3,6 @@ exports.get404 = ((req, res, next) => {
         {
             pageTitle: "404 Page",
             path: '/404',
-            isAuthenticated: req.isLoggedIn,
+            isAuthenticated: req.session.isLoggedIn,
     });
 });
