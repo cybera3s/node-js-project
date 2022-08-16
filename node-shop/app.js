@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
+const csrf = require("csurf");
 
 const errorController = require("./controllers/error");
 
@@ -17,6 +18,8 @@ const store = new MongoDBStore({
   uri: process.env.MONGODB_URL,
   collection: "sessions",
 });
+
+const csrfProtection = csrf();
 
 // template engine config
 
@@ -38,6 +41,7 @@ app.use(
     store: store,
   })
 );
+app.use(csrfProtection);
 
 // get user from session and add to every request
 app.use((req, res, next) => {
