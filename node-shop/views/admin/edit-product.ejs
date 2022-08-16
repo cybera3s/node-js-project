@@ -1,49 +1,49 @@
 <%- include('../includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/product.css">
+    </head>
 
-</head>
-<body>
+    <body>
 
-    <%- include('../includes/navigation.ejs') %>
+        <%- include('../includes/navigation.ejs') %>
 
 
-    <main>
-        <form class="product-form" action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST">
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <main class="row">
+                <form class="mx-auto col-12 col-sm-11 col-md-8 col-lg-6 col-xl-4"
+                    action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST">
+                    <!-- csrf token -->
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-            <div class="form-control">
-                <label for="title">Title</label>
-                <input type="text" id="title" name="title" 
-                    value="<% if (editing) { %><%=product.title%><% } %>"
-                >
-            </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" id="title" name="title" class="form-control" placeholder="Title Here..."
+                            value="<% if (editing) { %><%=product.title%><% } %>">
+                    </div>
 
-            <div class="form-control">
-                <label for="imageUrl">Image URL</label>
-                <input type="text" id="imageUrl" name="imageUrl"
-                    value="<% if (editing) { %><%=product.imageUrl%><% } %>"
-                >
-            </div>
+                    <div class="mb-3">
+                        <label for="imageUrl" class="form-label">Image URL</label>
+                        <input type="text" id="imageUrl" name="imageUrl" class="form-control"
+                            placeholder="Image URL Here..." value="<% if (editing) { %><%=product.imageUrl%><% } %>">
+                    </div>
 
-            <div class="form-control">
-                <label for="price">Price</label>
-                <input type="number" id="price" name="price" step="0.01"
-                    value="<% if (editing) { %><%=product.price%><% } %>""
-                >
-            </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" id="price" name="price" step="0.01" class="form-control"
+                            placeholder="Price Here..." value="<% if (editing) { %><%=product.price%><% } %>">
+                    </div>
 
-            <div class="form-control">
-                <label for="description">Description</label>
-                <textarea style="width: 100%;" id="description" name="description" rows="5"><% if (editing) { %><%= product.description %><% } %></textarea>
-            </div>
-            <% if (editing) { %>
+                    <div class=" mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea style="width: 100%;" id="description" name="description" class="form-control"
+                            placeholder="Description Here..."
+                            rows="5"><% if (editing) { %><%= product.description %><% } %></textarea>
+                    </div>
+                    <% if (editing) { %>
 
-                <input type="hidden" value="<%=  product._id%>" name="productId">
+                        <input type="hidden" value="<%=  product._id%>" name="productId">
 
-            <% } %>
-            <input type="submit" value="<% if (editing) { %>Update Product<% } else { %>Add<% } %>">
-        </form>
-    </main>
-    
-<%- include('../includes/end.ejs') %>
+                        <% } %>
+                            <input type="submit" class="btn btn-success w-100"
+                                value="<% if (editing) { %>Update Product<% } else { %>Add<% } %>">
+                </form>
+            </main>
+
+            <%- include('../includes/end.ejs') %>
