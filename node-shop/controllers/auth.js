@@ -11,18 +11,37 @@ exports.getLogin = (req, res, next) => {
 };
 
 exports.postLogin = (req, res, next) => {
-  User.findById("62f1208a797503c96a62d09b")
+  const email = req.body.email;
+  const password = req.body.password;
+
+  User.findOne({ email: email })
     .then((user) => {
-      req.session.isLoggedIn = true;
-      req.session.user = user;
-
-      req.session.save((err) => {
-        if (err) {
+      // if user does not exist!
+      if (!user) {
+        return res.redirect("/login");
+      }
+      // check raw password against hashed Password
+      bcrypt
+        .compare(password, user.password)
+        .then((doMatch) => {
+          // if passwords match set session then redirect to /
+          if (doMatch) {
+            req.session.isLoggedIn = true;
+            req.session.user = user;
+            return req.session.save((err) => {
+              if (err) {
+                console.log(err);
+              }
+              res.redirect("/");
+            });
+          }
+          // passwords does not match redirect /login
+          return res.redirect("/login");
+        })
+        .catch((err) => {
           console.log(err);
-        }
-
-        res.redirect("/");
-      });
+          res.redirect("/login");
+        });
     })
     .catch((err) => console.log(err));
 };
@@ -57,7 +76,8 @@ exports.postSignUp = (req, res, next) => {
         return res.redirect("/signup");
       }
       // hashing the password
-      return bcrypt.hash(password, 12)
+      return bcrypt
+        .hash(password, 12)
         .then((hashedPassword) => {
           // create new user with provided info
           const user = new User({
@@ -69,7 +89,7 @@ exports.postSignUp = (req, res, next) => {
         })
         .then((result) => {
           res.redirect("/login");
-        })
+        });
     })
     .catch((err) => console.log(err));
 };
