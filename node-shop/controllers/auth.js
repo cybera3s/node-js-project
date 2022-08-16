@@ -46,16 +46,6 @@ exports.postLogin = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-exports.getLogout = (req, res, next) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-    }
-
-    res.redirect("/");
-  });
-};
-
 exports.getSignUp = (req, res, next) => {
   res.render("auth/signup", {
     path: "/signup",
@@ -92,4 +82,11 @@ exports.postSignUp = (req, res, next) => {
         });
     })
     .catch((err) => console.log(err));
+};
+
+exports.getLogout = (req, res, next) => {
+  req.session.destroy(err => {
+    console.log(err);
+    res.redirect('/');
+  });
 };
