@@ -34,3 +34,12 @@ exports.getLogout = (req, res, next) => {
     res.redirect("/");
   });
 };
+
+exports.getSignUp = (req, res, next) => {
+  res.render("auth/signup", {
+    path: "/signup",
+    pageTitle: "Sign-up",
+    isAuthenticated: false,
+  });
+};
+
