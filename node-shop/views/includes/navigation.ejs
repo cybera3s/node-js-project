@@ -53,12 +53,16 @@
                     <a class="<%= path === '/login' ? 'active' : '' %>" href="/login">Login</a>
                 </li>
 
-            <% } else { %>
-
                 <li class="main_header__item">
-                    <a href="/login">Logout</a>
+                    <a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup">Sign Up</a>
                 </li>
-            <% } %>
+
+                <% } else { %>
+
+                    <li class="main_header__item">
+                        <a href="/login">Logout</a>
+                    </li>
+                    <% } %>
         </ul>
 
     </nav>
