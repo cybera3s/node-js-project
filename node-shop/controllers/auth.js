@@ -25,6 +25,7 @@ exports.postLogin = (req, res, next) => {
     .then((user) => {
       // if user does not exist!
       if (!user) {
+        req.flash("error", "Invalid email or Password.");
         return res.redirect("/login");
       }
       // check raw password against hashed Password
@@ -77,6 +78,7 @@ exports.postSignUp = (req, res, next) => {
     .then((userDoc) => {
       // if user with that email exist just redirect
       if (userDoc) {
+        req.flash("error", "User Already Exist.");
         return res.redirect("/signup");
       }
       // hashing the password
@@ -99,8 +101,8 @@ exports.postSignUp = (req, res, next) => {
 };
 
 exports.getLogout = (req, res, next) => {
-  req.session.destroy(err => {
+  req.session.destroy((err) => {
     console.log(err);
-    res.redirect('/');
+    res.redirect("/");
   });
 };
