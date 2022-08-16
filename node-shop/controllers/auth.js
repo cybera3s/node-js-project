@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const nodemailer = require('nodemailer');
 
 const User = require("../models/user");
 
@@ -11,6 +12,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_HOST_PASSWORD,
   },
 });
+
 exports.getLogin = (req, res, next) => {
   let message = req.flash("error");
   if (message.length > 0) {
@@ -105,7 +107,14 @@ exports.postSignUp = (req, res, next) => {
         })
         .then((result) => {
           res.redirect("/login");
-        });
+          return transporter.sendMail({
+            to: email,
+            from: 'cybera.3s@gmail.com',
+            subject: 'Sign up succeeded!',
+            html: '<h1>You have successfully signed up!</h1>'
+          })
+          
+        }).catch(err => console.log(err));
     })
     .catch((err) => console.log(err));
 };
