@@ -44,6 +44,7 @@ exports.postLogin = (req, res, next) => {
             });
           }
           // passwords does not match redirect /login
+          req.flash('error', 'Invalid Email or Password.');
           return res.redirect("/login");
         })
         .catch((err) => {
