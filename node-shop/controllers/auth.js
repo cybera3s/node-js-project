@@ -2,6 +2,15 @@ const bcrypt = require("bcryptjs");
 
 const User = require("../models/user");
 
+// Email Configuration
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  auth: {
+    user: process.env.EMAIL_USERNAME,
+    pass: process.env.EMAIL_HOST_PASSWORD,
+  },
+});
 exports.getLogin = (req, res, next) => {
   let message = req.flash("error");
   if (message.length > 0) {
