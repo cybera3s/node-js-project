@@ -11,6 +11,8 @@
             <main class="row">
                 <form class="login-form mx-auto col-12 col-sm-11 col-md-8 col-lg-6 col-xl-4" action="/signup"
                     method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
                     <div class="mb-3">
                         <label for="email" class="form-label">Email Address</label>
                         <input type="email" class="form-control" id="email" name="email"
