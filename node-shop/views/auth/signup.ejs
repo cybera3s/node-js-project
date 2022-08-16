@@ -11,27 +11,35 @@
             <main class="row">
                 <form class="login-form mx-auto col-12 col-sm-11 col-md-8 col-lg-6 col-xl-4" action="/signup"
                     method="POST">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <% if (errorMessage) { %>
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Sign-up Failed!</strong>
+                            <%= errorMessage %>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                        </div>
+                        <% } %>
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email"
-                            placeholder="Email Address Here">
-                    </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    placeholder="Email Address Here">
+                            </div>
 
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password"
-                            placeholder="Password Here">
-                    </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password"
+                                    placeholder="Password Here">
+                            </div>
 
-                    <div class="mb-3">
-                        <label for="confirmPassword" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-                            placeholder="Confirm Password Here">
-                    </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                    placeholder="Confirm Password Here">
+                            </div>
 
-                    <button type="submit" class="btn btn-success w-100">Sign Up</button>
+                            <button type="submit" class="btn btn-success w-100">Sign Up</button>
                 </form>
             </main>
 
