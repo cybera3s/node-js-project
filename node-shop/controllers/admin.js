@@ -65,14 +65,17 @@ exports.postEditProduct = (req, res, next) => {
 
   Product.findById(prodId)
     .then((product) => {
+      if (product.userId.toString() !== req.user._id.toString()) {
+        return res.redirect("/");
+      }
+
       product.title = updatedTitle;
       product.price = updatedPrice;
       product.description = updatedDescription;
       product.imageUrl = updatedImageUrl;
-      return product.save();
-    })
-    .then((result) => {
-      res.redirect("/admin/products");
+      return product.save().then((result) => {
+        res.redirect("/admin/products");
+      });
     })
     .catch((err) => console.log(err));
 };
