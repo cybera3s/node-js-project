@@ -9,11 +9,10 @@
 
 
             <main class="row">
-                <form class="login-form mx-auto col-12 col-sm-11 col-md-8 col-lg-6 col-xl-4" action="/login/"
+                <form class="login-form mx-auto col-12 col-sm-11 col-md-8 col-lg-6 col-xl-4" action="/reset"
                     method="POST">
                     <% if (errorMessage) { %>
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                            <strong>Login Failed!</strong>
                             <%= errorMessage %>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
