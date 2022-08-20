@@ -1,11 +1,12 @@
+const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 const User = require("../models/user");
 
 // Email Configuration
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
+  host: "smtp.gmail.com",
   port: 587,
   auth: {
     user: process.env.EMAIL_USERNAME,
@@ -55,7 +56,7 @@ exports.postLogin = (req, res, next) => {
             });
           }
           // passwords does not match redirect /login
-          req.flash('error', 'Invalid Email or Password.');
+          req.flash("error", "Invalid Email or Password.");
           return res.redirect("/login");
         })
         .catch((err) => {
@@ -109,12 +110,12 @@ exports.postSignUp = (req, res, next) => {
           res.redirect("/login");
           return transporter.sendMail({
             to: email,
-            from: 'cybera.3s@gmail.com',
-            subject: 'Sign up succeeded!',
-            html: '<h1>You have successfully signed up!</h1>'
-          })
-          
-        }).catch(err => console.log(err));
+            from: "cybera.3s@gmail.com",
+            subject: "Sign up succeeded!",
+            html: "<h1>You have successfully signed up!</h1>",
+          });
+        })
+        .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
 };
@@ -133,10 +134,45 @@ exports.getReset = (req, res, next) => {
   } else {
     message = null;
   }
-  
+
   res.render("auth/reset", {
     path: "/reset",
     pageTitle: "Reset Password",
     errorMessage: message,
+  });
+};
+
+exports.postReset = (req, res, next) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+      return res.redirect("/reset");
+    }
+    const token = buffer.toString("hex");
+    
+    User.findOne({ email: req.body.email })
+      .then((user) => {
+        if (!user){
+          req.flash('error', 'No account with that email found');
+          return res.redirect("/reset");
+        }
+
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 3600000;
+        return user.save();
+      })
+      .then((result) => {
+        res.redirect("/");
+        transporter.sendMail({
+          to: req.body.email,
+          from: "cybera.3s@gmail.com",
+          subject: "Password Reset!",
+          html: `
+            <p>You Requested Password Reset</p>
+            <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new Password.<p>
+          `,
+        });
+      })
+      .catch(err => console.log(err));
   });
 };
