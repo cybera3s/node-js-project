@@ -23,26 +23,43 @@
 
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="email" name="email"
-                                    placeholder="Email Address Here"
-                                    value="<%= oldInput.email %>"
-                                    >
+                                <input type="email"
+                                    class="form-control <%= validationErrors.find(e => e.param === 'email') ? 'is-invalid' : '' %>"
+                                    id="email" name="email" placeholder="Email Address Here"
+                                    value="<%= oldInput.email %>" aria-describedby="validationServerEmailFeedback"
+                                    required>
+                                
+                                <div id="validationServerEmailFeedback" class="invalid-feedback">
+                                    <%= validationErrors.find(e => e.param === 'email') ? validationErrors.find(e => e.param === 'email').msg : '' %>
+                                </div>
                             </div>
 
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password"
-                                    placeholder="Password Here"
-                                    value="<%= oldInput.password %>"
-                                    >
+                                <input type="password" class="form-control <%= validationErrors.find(e => e.param === 'password') ? 'is-invalid' : '' %>" 
+                                id="password" name="password"
+                                    placeholder="Password Here" value="<%= oldInput.password %>" 
+                                    aria-describedby="validationServerPasswordFeedback"
+                                    required>
+
+                                <div id="validationServerPasswordFeedback" class="invalid-feedback">
+                                    <%= validationErrors.find(e => e.param === 'password') ? validationErrors.find(e => e.param === 'password').msg : '' %>
+                                </div>
                             </div>
 
                             <div class="mb-3">
                                 <label for="confirmPassword" class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-                                    placeholder="Confirm Password Here"
-                                    value="<%= oldInput.confirmPassword %>"
-                                    >
+                                <input type="password" 
+                                    class="form-control <%= validationErrors.find(e => e.param === 'confirmPassword') ? 'is-invalid' : '' %>" 
+                                    id="confirmPassword" name="confirmPassword"
+                                    placeholder="Confirm Password Here" value="<%= oldInput.confirmPassword %>"
+                                    aria-describedby="validationServerConfirmPasswordFeedback"
+                                    required    
+                                >
+                                
+                                <div id="validationServerConfirmPasswordFeedback" class="invalid-feedback">
+                                    <%= validationErrors.find(e => e.param === 'confirmPassword') ? validationErrors.find(e => e.param === 'confirmPassword').msg : '' %>
+                                </div>
                             </div>
 
                             <button type="submit" class="btn btn-success w-100">Sign Up</button>
