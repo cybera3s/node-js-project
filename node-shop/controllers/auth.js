@@ -109,12 +109,13 @@ exports.postSignUp = (req, res, next) => {
     return res.status(422).render("auth/signup", {
       path: "/signup",
       pageTitle: "Sign-up",
-      errorMessage: errors.array()[0].msg,
+      errorMessage: 'Please Correct Below Errors!',
       oldInput: {
         email: email,
         password: password,
         confirmPassword: req.body.confirmPassword,
       },
+      validationErrors: errors.array(),
     });
   }
   // hashing the password
