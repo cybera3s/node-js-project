@@ -10,7 +10,7 @@
 
             <main class="row">
                 <form class="login-form mx-auto col-12 col-sm-11 col-md-8 col-lg-6 col-xl-4" action="/signup"
-                    method="POST">
+                    method="POST" novalidate>
                     <% if (errorMessage) { %>
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
                             <strong>Sign-up Failed!</strong>
@@ -24,19 +24,25 @@
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email Address</label>
                                 <input type="email" class="form-control" id="email" name="email"
-                                    placeholder="Email Address Here">
+                                    placeholder="Email Address Here"
+                                    value="<%= oldInput.email %>"
+                                    >
                             </div>
 
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" name="password"
-                                    placeholder="Password Here">
+                                    placeholder="Password Here"
+                                    value="<%= oldInput.password %>"
+                                    >
                             </div>
 
                             <div class="mb-3">
                                 <label for="confirmPassword" class="form-label">Confirm Password</label>
                                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-                                    placeholder="Confirm Password Here">
+                                    placeholder="Confirm Password Here"
+                                    value="<%= oldInput.confirmPassword %>"
+                                    >
                             </div>
 
                             <button type="submit" class="btn btn-success w-100">Sign Up</button>
