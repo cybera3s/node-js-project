@@ -88,6 +88,11 @@ exports.getSignUp = (req, res, next) => {
     path: "/signup",
     pageTitle: "Sign-up",
     errorMessage: message,
+    oldInput: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+    }
   });
 };
 
