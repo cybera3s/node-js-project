@@ -39,14 +39,17 @@
                                 <label for="password" class="form-label">Password</label>
                                 <input 
                                     type="password"
-                                    class="form-control" 
+                                    class="form-control <%= validationErrors.find(e => e.param === 'password') ? 'is-invalid' : '' %>" 
                                     id="password" 
                                     name="password"
                                     placeholder="Password Here"
                                     value="<%= oldInput.password %>"
                                     required
                                 >
-                                
+                                <div class="invalid-feedback">
+                                    <%= validationErrors.find(e=> e.param === 'password') ? validationErrors.find(e =>
+                                        e.param === 'password').msg : '' %>
+                                </div>
                             </div>
 
                             <div class="mb-3">
