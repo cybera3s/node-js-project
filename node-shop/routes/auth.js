@@ -8,7 +8,11 @@ const router = express.Router();
 
 router.get("/login", authController.getLogin);
 
-router.post("/login", authController.postLogin);
+router.post("/login", [
+  body('email', "Please enter a valid email")
+  .isEmail(),
+],
+authController.postLogin);
 
 router.get("/signup", authController.getSignUp);
 
