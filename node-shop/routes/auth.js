@@ -31,17 +31,21 @@ router.post(
             return Promise.reject("E-Mail Already exists!");
           }
         });
-      }),
+      }).
+      normalizeEmail(),
     body(
       "password",
       "Please Enter a password with at least 4 characters."
-    ).isLength({ min: 4 }),
-    body("confirmPassword").custom((value, { req }) => {
+    ).isLength({ min: 4 })
+    .trim(),
+    body("confirmPassword")
+    .custom((value, { req }) => {
       if (value !== req.body.password) {
         throw new Error("Passwords have to match!");
       }
       return true;
-    }),
+    })
+    .trim(),
   ],
   authController.postSignUp
 );
