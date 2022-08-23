@@ -11,7 +11,7 @@ router.get("/login", authController.getLogin);
 router.post("/login", [
   body('email', "Please enter a valid email")
   .isEmail()
-  .normalizeEmail(),
+  .normalizeEmail({"gmail_remove_dots": false }),
   body('password', "Please enter a valid password with at least 4 characters.")
   .isLength({min: 4})
   .trim()
@@ -32,7 +32,7 @@ router.post(
           }
         });
       }).
-      normalizeEmail(),
+      normalizeEmail({"gmail_remove_dots": false }),
     body(
       "password",
       "Please Enter a password with at least 4 characters."
