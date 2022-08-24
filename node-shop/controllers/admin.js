@@ -22,6 +22,24 @@ exports.postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("admin/edit-product", {
+      pageTitle: "Add Product",
+      path: "/admin/add-product",
+      editing: false,
+      errorMessage: "Please correct Below Errors!.",
+      oldInput: {
+          title: title,
+          imageUrl: imageUrl,
+          price: price,
+          description: description,
+      },
+      validationErrors: errors.array(),
+    });
+  }
+  
   const product = new Product({
     title: title,
     price: price,
