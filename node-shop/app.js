@@ -75,7 +75,8 @@ app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
-// handle 404 page
+// handle error page
+app.get('/500', errorController.get500);
 app.use(errorController.get404);
 
 const PORT = 3000;
