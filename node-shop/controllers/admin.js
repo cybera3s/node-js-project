@@ -1,3 +1,5 @@
+const { validationResult } = require("express-validator");
+
 const Product = require("../models/product");
 
 exports.getAddProduct = (req, res, next) => {
@@ -96,6 +98,25 @@ exports.postEditProduct = (req, res, next) => {
   const updatedPrice = req.body.price;
   const updatedImageUrl = req.body.imageUrl;
   const updatedDescription = req.body.description;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("admin/edit-product", {
+      pageTitle: "Edit Product",
+      path: "/admin/edit-product",
+      editing: true,
+      errorMessage: "Please correct Below Errors!.",
+      product: {
+          _id: prodId,
+          title: updatedTitle,
+          imageUrl: updatedImageUrl,
+          price: updatedPrice,
+          description: updatedDescription,
+      },
+      validationErrors: errors.array(),
+    });
+  };
 
   Product.findById(prodId)
     .then((product) => {
