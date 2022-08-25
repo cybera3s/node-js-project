@@ -113,7 +113,7 @@ exports.postEditProduct = (req, res, next) => {
   const prodId = req.body.productId;
   const updatedTitle = req.body.title;
   const updatedPrice = req.body.price;
-  const updatedImageUrl = req.body.imageUrl;
+  const image = req.file;
   const updatedDescription = req.body.description;
 
   const errors = validationResult(req);
@@ -125,15 +125,14 @@ exports.postEditProduct = (req, res, next) => {
       editing: true,
       errorMessage: "Please correct Below Errors!.",
       product: {
-          _id: prodId,
-          title: updatedTitle,
-          imageUrl: updatedImageUrl,
-          price: updatedPrice,
-          description: updatedDescription,
+        _id: prodId,
+        title: updatedTitle,
+        price: updatedPrice,
+        description: updatedDescription,
       },
       validationErrors: errors.array(),
     });
-  };
+  }
 
   Product.findById(prodId)
     .then((product) => {
@@ -144,7 +143,10 @@ exports.postEditProduct = (req, res, next) => {
       product.title = updatedTitle;
       product.price = updatedPrice;
       product.description = updatedDescription;
-      product.imageUrl = updatedImageUrl;
+      if (image) {
+        product.imageUrl = image.path;
+      };
+
       return product.save().then((result) => {
         res.redirect("/admin/products");
       });
