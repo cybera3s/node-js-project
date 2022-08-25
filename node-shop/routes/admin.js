@@ -20,8 +20,6 @@ router.post("/add-product",
     .isAlphanumeric(['en-US'], {'ignore': ' '})    
     .isLength({ min: 2, max: 150 })
     .trim(),
-    body('imageUrl', "Please enter a valid URL")
-    .isURL(),
     body('price', "Price must be Integer or Decimal and greater than 0")
     .isFloat({ gt: 0 }),
     body('description', "Description must only contain letters and numbers")
