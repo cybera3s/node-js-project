@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 
+const fileHelper = require("../util/file");
 const Product = require("../models/product");
 
 exports.getAddProduct = (req, res, next) => {
@@ -144,8 +145,9 @@ exports.postEditProduct = (req, res, next) => {
       product.price = updatedPrice;
       product.description = updatedDescription;
       if (image) {
+        fileHelper.deleteFile(product.imageUrl);
         product.imageUrl = image.path;
-      };
+      }
 
       return product.save().then((result) => {
         res.redirect("/admin/products");
