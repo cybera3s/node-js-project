@@ -9,6 +9,7 @@
             <main class="row">
                 <form class="mx-auto col-12 col-sm-11 col-md-8 col-lg-6 col-xl-4"
                     action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST"
+                    enctype="multipart/form-data"
                     novalidate>
                     <% if (errorMessage) { %>
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -36,15 +37,10 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="imageUrl" class="form-label">Image URL</label>
-                                <input type="text" id="imageUrl" name="imageUrl"
-                                    class="form-control <%= validationErrors.find(e => e.param === 'imageUrl') ? 'is-invalid' : '' %>"
-                                    placeholder="Image URL Here..."
-                                    value="<%= (editing) ? product.imageUrl : oldInput.imageUrl %>">
-                                <div id="validationServerEmailFeedback" class="invalid-feedback">
-                                    <%= validationErrors.find(e=> e.param === 'imageUrl') ? validationErrors.find(e =>
-                                        e.param === 'imageUrl').msg : '' %>
-                                </div>
+                                <label for="image" class="form-label">Image</label>
+                                <input class="form-control" type="file" id="image"
+                                    name="image"
+                                >
                             </div>
 
                             <div class="mb-3">
