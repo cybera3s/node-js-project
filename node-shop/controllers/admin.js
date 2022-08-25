@@ -84,7 +84,7 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect("/");
   }
   const prodId = req.params.productId;
-  
+
   // get products to related user
   Product.findById(prodId)
     .then((product) => {
@@ -93,14 +93,13 @@ exports.getEditProduct = (req, res, next) => {
         path: "/admin/edit-product",
         editing: editMode,
         product: product,
-        errorMessage: '',
+        errorMessage: "",
         oldInput: {
-          title: '',
-          imageUrl: '',
-          price: '',
-          description: '',
+          title: "",
+          price: "",
+          description: "",
         },
-        validationErrors: []
+        validationErrors: [],
       });
     })
     .catch((err) => {
