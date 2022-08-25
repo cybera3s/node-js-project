@@ -7,14 +7,13 @@ exports.getAddProduct = (req, res, next) => {
     pageTitle: "Add Product",
     path: "/admin/add-product",
     editing: false,
-    errorMessage: '',
+    errorMessage: "",
     oldInput: {
-      title: '',
-      imageUrl: '',
-      price: '',
-      description: '',
+      title: "",
+      price: "",
+      description: "",
     },
-    validationErrors: []
+    validationErrors: [],
   });
 };
 
