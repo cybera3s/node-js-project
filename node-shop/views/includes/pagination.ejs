@@ -1,0 +1,64 @@
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        <% if (hasPreviousPage) { %>
+
+            <li class="page-item">
+                <a class="page-link" href="?page=<%= previousPage %>">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            
+        <% } %>
+
+        <% if (currentPage !==1 && previousPage !==1) { %>
+            <li class="page-item">
+                <a class="page-link" href="?page=1">1</a>
+            </li>
+        <% } %>
+
+        <% if (hasPreviousPage) { %>
+            <li class="page-item">
+                <a class="page-link" href="?page=<%= previousPage %>"><%= previousPage %></a>
+            </li>
+        <% } %>
+        
+        <li class="page-item">
+            <a class="page-link active" 
+                href="?page=<%= currentPage %>">
+            <%= currentPage %>
+            </a>
+        </li>
+        
+        <% if (hasNextPage) { %>
+            <li class="page-item">
+                <a class="page-link" href="?page=<%= nextPage %>"><%= nextPage %></a>
+            </li>
+        <% } %>
+
+        <% if (lastPage !== currentPage && nextPage !== lastPage) { %>
+            <li class="page-item">
+                <a class="page-link">
+                ...
+                </a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link"
+                    href="?page=<%= lastPage %>">
+                    <%= lastPage %>
+                </a>
+            </li>
+        <% } %>
+        
+        <% if (hasNextPage) { %>
+
+        <li class="page-item">
+            <a class="page-link" href="?page=<%= nextPage %>">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+
+        <% } %>
+
+    </ul>
+</nav>
