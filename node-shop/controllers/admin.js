@@ -2,11 +2,12 @@ const { validationResult } = require("express-validator");
 
 const fileHelper = require("../util/file");
 const Product = require("../models/product");
+const catchError = require("../util/catchError");
 
+/**
+  Handles GET request to reach out add product page
+*/
 exports.getAddProduct = (req, res, next) => {
-  /*
-    GET request to add product page
-  */
 
   res.render("admin/edit-product", {
     pageTitle: "Add Product",
@@ -22,10 +23,10 @@ exports.getAddProduct = (req, res, next) => {
   });
 };
 
+/**
+  Handles POST request to add a new product
+*/
 exports.postAddProduct = async (req, res, next) => {
-  /*
-    POST request to add new product
-  */
 
   const title = req.body.title;
   const image = req.file;
@@ -80,17 +81,15 @@ exports.postAddProduct = async (req, res, next) => {
     console.log("Product Created!");
     res.redirect("/admin/products");
   } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    next(error);
+    catchError(err, next);
   }
 };
 
+/**
+  Handles GET request to reach out edit product page
+*/
 exports.getEditProduct = async (req, res, next) => {
-  /*
-    GET request to edit a product 
-    product ID provided in the query parameter
-  */
+  
 
   const editMode = req.query.edit; // admin/edit-product?edit=true
   if (!editMode) {
@@ -98,7 +97,6 @@ exports.getEditProduct = async (req, res, next) => {
   };
 
   const prodId = req.params.productId;
-
   const product = await Product.findById(prodId);
 
   try {
@@ -117,17 +115,15 @@ exports.getEditProduct = async (req, res, next) => {
     });
 
   } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    return next(error);
+    catchError(err, next);
   };
 
 };
 
+/**
+  Handles POST request to edit a Product
+*/
 exports.postEditProduct = async (req, res, next) => {
-  /*
-    POST request to edit a Product
-  */
 
   const prodId = req.body.productId;
   const updatedTitle = req.body.title;
@@ -177,18 +173,17 @@ exports.postEditProduct = async (req, res, next) => {
     res.redirect("/admin/products");
     
   } catch (err) {
-
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
+      catchError(err, next);
   };
 
 };
 
+
+/**
+    Handles DELETE request to remove a product
+*/
 exports.deleteProduct = async (req, res, next) => {
-  /*
-    DELETE request to remove a product
-  */
+  
   const prodId = req.params.productId;
 
   try {
@@ -211,10 +206,10 @@ exports.deleteProduct = async (req, res, next) => {
 
 };
 
+/*
+    Handles GET request to reach out products list of current active user 
+*/
 exports.getProducts = async (req, res, next) => {
-  /*
-    GET request to list user products
-  */
 
   try {
     // fetch current active user products
@@ -228,9 +223,7 @@ exports.getProducts = async (req, res, next) => {
     });
 
   } catch (err) {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
+      catchError(err, next);
   };
 
 };
