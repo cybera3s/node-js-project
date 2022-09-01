@@ -4,12 +4,14 @@ const { validationResult } = require("express-validator");
 
 const User = require("../models/user");
 const transporter = require("../util/email");
+const catchError = require("../util/catchError");
 
-exports.getLogin = (req, res, next) => {
-  /*
-    GET request to login page
-  */
-
+/**
+    Returns Extracted message from provided 
+    request flash object or null
+    @param req request object
+*/
+const getFlashMessage = (req) => {
   // set flash message if exist
   let message = req.flash("error");
   if (message.length > 0) {
@@ -17,11 +19,18 @@ exports.getLogin = (req, res, next) => {
   } else {
     message = null;
   }
+  return message
+};
+
+/**
+    Handles GET request to reach out login page
+*/
+exports.getLogin = (req, res, next) => {
 
   res.render("auth/login", {
     path: "/login",
     pageTitle: "Login",
-    errorMessage: message,
+    errorMessage: getFlashMessage(req),
     oldInput: {
       email: "",
       password: "",
@@ -30,10 +39,11 @@ exports.getLogin = (req, res, next) => {
   });
 };
 
+/**
+    Handles POST request to sign in a existing user
+*/
 exports.postLogin = async (req, res, next) => {
-  /*
-    POST request to sign in a existing user
-  */
+ 
   const email = req.body.email;
   const password = req.body.password;
 
@@ -50,7 +60,7 @@ exports.postLogin = async (req, res, next) => {
       },
       validationErrors: errors.array(),
     });
-  }
+  };
 
   try {
     const user = await User.findOne({ email: email });
@@ -95,28 +105,20 @@ exports.postLogin = async (req, res, next) => {
       validationErrors: [],
     });
   } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    return next(error);
-  }
+    catchError(err, next);
+  };
+
 };
 
+/**
+    Handles GET request to reach out signup page
+*/
 exports.getSignUp = (req, res, next) => {
-  /*
-    GET request to signup page
-  */
-
-  let message = req.flash("error");
-  if (message.length > 0) {
-    message = message[0];
-  } else {
-    message = null;
-  }
 
   res.render("auth/signup", {
     path: "/signup",
     pageTitle: "Sign-up",
-    errorMessage: message,
+    errorMessage: getFlashMessage(req),
     oldInput: {
       email: "",
       password: "",
@@ -126,10 +128,11 @@ exports.getSignUp = (req, res, next) => {
   });
 };
 
+/**
+    Handles POST request to signup a new user
+*/
 exports.postSignUp = async (req, res, next) => {
-  /*
-    POST request to signup a new user
-  */
+  
   const email = req.body.email;
   const password = req.body.password;
 
@@ -147,7 +150,7 @@ exports.postSignUp = async (req, res, next) => {
       },
       validationErrors: errors.array(),
     });
-  }
+  };
 
   try {
     // hashing the password
@@ -169,17 +172,16 @@ exports.postSignUp = async (req, res, next) => {
       html: "<h1>You have successfully signed up!</h1>",
     });
   } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    return next(error);
-  }
+    catchError(err, next);
+  };
+
 };
 
+/**
+    Handles GET request to log out the current active user
+*/
 exports.getLogout = (req, res, next) => {
-  /*
-    GET request to log out the user
-  */
-
+  
   // removing session
   req.session.destroy((err) => {
     console.log(err);
@@ -187,29 +189,24 @@ exports.getLogout = (req, res, next) => {
   });
 };
 
+/**
+    Handles GET request to reach out reset password page
+*/
 exports.getReset = (req, res, next) => {
-  /*
-      GET request to reset password page
-  */
-  let message = req.flash("error");
-  if (message.length > 0) {
-    message = message[0];
-  } else {
-    message = null;
-  }
-
+  
   res.render("auth/reset", {
     path: "/reset",
     pageTitle: "Reset Password",
-    errorMessage: message,
+    errorMessage: getFlashMessage(req),
   });
 };
 
+/**
+    Handles POST request to Reset password and 
+    send a email with provided reset link
+*/
 exports.postReset = async (req, res, next) => {
-  /*
-    POST request to Reset password and receive a email 
-  */
-
+  
   // generate a random token
   crypto.randomBytes(32, async (err, buffer) => {
     if (err) {
@@ -225,7 +222,7 @@ exports.postReset = async (req, res, next) => {
       if (!user) {
         req.flash("error", "No account with that email found");
         return res.redirect("/reset");
-      };
+      }
 
       // save token and its expire date on user object
       const minTtl = 5;
@@ -249,18 +246,18 @@ exports.postReset = async (req, res, next) => {
           `,
       });
     } catch (err) {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    }
+      catchError(err, next);
+    };
+
   });
+
 };
 
+/**
+    Handles GET request to reach out new password Page
+*/
 exports.getNewPassword = async (req, res, next) => {
-  /*
-    GET request to new password Page
-  */
-
+  
   const token = req.params.token;
 
   try {
@@ -289,23 +286,22 @@ exports.getNewPassword = async (req, res, next) => {
       passwordToken: token,
     });
   } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    return next(error);
-  }
+    catchError(err, next);
+  };
+
 };
 
+/*
+    Handles POST request to Set a new password for user
+*/
 exports.postNewPassword = async (req, res, next) => {
-  /*
-    POST request to Set a new password for user
-  */
 
   const newPassword = req.body.password;
   const userId = req.body.userId;
   const passwordToken = req.body.passwordToken;
 
   try {
-    // fetch user with provided token and user id 
+    // fetch user with provided token and user id
     const user = await User.findOne({
       resetToken: passwordToken,
       resetTokenExpiration: { $gt: Date.now() },
@@ -321,12 +317,8 @@ exports.postNewPassword = async (req, res, next) => {
     await user.save();
 
     res.redirect("/login");
-
   } catch (err) {
-
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    return next(error);
+    catchError(err, next);
   };
 
 };
