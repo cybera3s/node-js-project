@@ -27,7 +27,19 @@ const userSchema = Schema({
   },
 });
 
-userSchema.methods.addToCart = function (product) {
+
+userSchema.methods.addToCart = 
+/**
+    add provided product object to cart items 
+    if product exists in cart items add up it's quantity
+    else add new product to cart items 
+    finally save the cart
+
+    @param product product object
+*/
+function (product) {
+  
+  // get index of product in cart items otherwise -1
   const cartProductIndex = this.cart.items.findIndex((cp) => {
     return cp.productId.toString() === product._id.toString();
   });
@@ -35,10 +47,12 @@ userSchema.methods.addToCart = function (product) {
   let newQuantity = 1;
   const updatedCartItems = [...this.cart.items];
 
+  // product already exists in cart items then adds up it's quantity with 1
   if (cartProductIndex >= 0) {
     newQuantity = this.cart.items[cartProductIndex].quantity + 1;
     updatedCartItems[cartProductIndex].quantity = newQuantity;
-  } else {
+  // product is new
+  } else {  
     updatedCartItems.push({
       productId: product._id,
       quantity: newQuantity,
