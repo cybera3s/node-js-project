@@ -1,6 +1,8 @@
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const { validationResult } = require("express-validator");
+const ejs = require("ejs");
+const path = require("path");
 
 const User = require("../models/user");
 const transporter = require("../util/email");
@@ -233,18 +235,25 @@ exports.postReset = async (req, res, next) => {
 
       res.redirect("/");
 
-      transporter.sendMail({
-        to: req.body.email,
-        from: "cybera.3s@gmail.com",
-        subject: "Password Reset!",
-        html: `
-            <p>You Requested Password Reset</p>
-            <p>Link will expire at ${
-              expireAt.toLocaleTimeString() + " - " + expireAt.toDateString()
-            }</p>
-            <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new Password.<p>
-          `,
+      const timeToExpire = expireAt.toLocaleTimeString() + " - " + expireAt.toDateString();
+
+      // render email reset link template
+      const emailTemplate = await ejs.renderFile(path.join(__dirname, '..', 'views', 'includes', 'email-reset.ejs'), {
+        timeToExpire: timeToExpire,
+        token: token,
+        email: 'cybera.3s@gmail.com',
+        link: `http://localhost:3000/reset/${token}`,
       });
+
+      if (data) {
+        transporter.sendMail({
+          to: req.body.email,
+          from: "cybera.3s@gmail.com",
+          subject: "Password Reset!",
+          html: emailTemplate,
+        });
+      }
+      
     } catch (err) {
       catchError(err, next);
     };
