@@ -4,6 +4,10 @@ const fileHelper = require("../util/file");
 const Product = require("../models/product");
 
 exports.getAddProduct = (req, res, next) => {
+  /*
+    GET request to add product page
+  */
+
   res.render("admin/edit-product", {
     pageTitle: "Add Product",
     path: "/admin/add-product",
@@ -18,7 +22,11 @@ exports.getAddProduct = (req, res, next) => {
   });
 };
 
-exports.postAddProduct = (req, res, next) => {
+exports.postAddProduct = async (req, res, next) => {
+  /*
+    POST request to add new product
+  */
+
   const title = req.body.title;
   const image = req.file;
   const price = req.body.price;
@@ -26,6 +34,7 @@ exports.postAddProduct = (req, res, next) => {
 
   const errors = validationResult(req);
 
+  // check if image file exists in request
   if (!image) {
     return res.status(422).render("admin/edit-product", {
       pageTitle: "Add Product",
@@ -40,7 +49,7 @@ exports.postAddProduct = (req, res, next) => {
       validationErrors: errors.array(),
     });
   }
-
+  // user input validations
   if (!errors.isEmpty()) {
     return res.status(422).render("admin/edit-product", {
       pageTitle: "Add Product",
@@ -66,59 +75,69 @@ exports.postAddProduct = (req, res, next) => {
     userId: req.user,
   });
 
-  product
-    .save()
-    .then((result) => {
-      console.log("Product Created!");
-      res.redirect("/admin/products");
-    })
-    .catch((err) => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
+  try {
+    await product.save();
+    console.log("Product Created!");
+    res.redirect("/admin/products");
+  } catch (err) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    next(error);
+  }
 };
 
-exports.getEditProduct = (req, res, next) => {
-  const editMode = req.query.edit;
+exports.getEditProduct = async (req, res, next) => {
+  /*
+    GET request to edit a product 
+    product ID provided in the query parameter
+  */
+
+  const editMode = req.query.edit; // admin/edit-product?edit=true
   if (!editMode) {
     return res.redirect("/");
-  }
+  };
+
   const prodId = req.params.productId;
 
-  // get products to related user
-  Product.findById(prodId)
-    .then((product) => {
-      res.render("admin/edit-product", {
-        pageTitle: "Edit Product",
-        path: "/admin/edit-product",
-        editing: editMode,
-        product: product,
-        errorMessage: "",
-        oldInput: {
-          title: "",
-          price: "",
-          description: "",
-        },
-        validationErrors: [],
-      });
-    })
-    .catch((err) => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
+  const product = await Product.findById(prodId);
+
+  try {
+    res.render("admin/edit-product", {
+      pageTitle: "Edit Product",
+      path: "/admin/edit-product",
+      editing: editMode,
+      product: product,
+      errorMessage: "",
+      oldInput: {
+        title: "",
+        price: "",
+        description: "",
+      },
+      validationErrors: [],
     });
+
+  } catch (err) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  };
+
 };
 
-exports.postEditProduct = (req, res, next) => {
+exports.postEditProduct = async (req, res, next) => {
+  /*
+    POST request to edit a Product
+  */
+
   const prodId = req.body.productId;
   const updatedTitle = req.body.title;
   const updatedPrice = req.body.price;
-  const image = req.file;
   const updatedDescription = req.body.description;
+  const image = req.file;
 
   const errors = validationResult(req);
 
+  // user input validations
   if (!errors.isEmpty()) {
     return res.status(422).render("admin/edit-product", {
       pageTitle: "Edit Product",
@@ -135,68 +154,83 @@ exports.postEditProduct = (req, res, next) => {
     });
   }
 
-  Product.findById(prodId)
-    .then((product) => {
-      if (product.userId.toString() !== req.user._id.toString()) {
-        return res.redirect("/");
-      }
+  try {
+    
+    const product = await Product.findById(prodId);
 
-      product.title = updatedTitle;
-      product.price = updatedPrice;
-      product.description = updatedDescription;
-      if (image) {
-        fileHelper.deleteFile(product.imageUrl);
-        product.imageUrl = image.path;
-      }
+    // check ownership of product for user
+    if (product.userId.toString() !== req.user._id.toString()) {
+      return res.redirect("/");
+    };
 
-      return product.save().then((result) => {
-        res.redirect("/admin/products");
-      });
-    })
-    .catch((err) => {
+    product.title = updatedTitle;
+    product.price = updatedPrice;
+    product.description = updatedDescription;
+
+    // remove image and update imageUrl of product if new image uploaded
+    if (image) {
+      fileHelper.deleteFile(product.imageUrl);
+      product.imageUrl = image.path;
+    };
+
+    await product.save();
+    res.redirect("/admin/products");
+    
+  } catch (err) {
+
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });
+  };
+
 };
 
-exports.deleteProduct = (req, res, next) => {
+exports.deleteProduct = async (req, res, next) => {
+  /*
+    DELETE request to remove a product
+  */
   const prodId = req.params.productId;
 
-  Product.findById(prodId)
-    .then((product) => {
-      if (!product) {
-        return next(new Error("Product not found"));
-      }
+  try {
 
-      fileHelper.deleteFile(product.imageUrl);
-      return Product.deleteOne({ _id: prodId, userId: req.user._id });
-    })
-    .then(() => {
-      console.log("Destroyed product");
-      res.status(200).json({ message: "Product Deleted" });
-    })
-    .catch((err) => {
-      res.status(500).json({ message: "Deleting Product Failed." });
-    });
+    const product = await Product.findById(prodId);
+    // check product existence
+    if (!product) {
+      return next(new Error("Product not found"));
+    };
+    // remove product image file
+    fileHelper.deleteFile(product.imageUrl);
+    await Product.deleteOne({ _id: prodId, userId: req.user._id });
+
+    console.log("Destroyed product");
+    res.status(200).json({ message: "Product Deleted" });
+
+  } catch (err) {
+    res.status(500).json({ message: "Deleting Product Failed." });
+  };
+
 };
 
-exports.getProducts = (req, res, next) => {
-  Product.find({ userId: req.user._id })
-    // .select('title price -_id')
-    // .populate('userId', 'name')
-    .then((products) => {
-      res.render("admin/products", {
-        prods: products,
-        pageTitle: "Admin Products",
-        path: "/admin/products",
-        hasProducts: products.length > 0,
-        activeShop: true,
-      });
-    })
-    .catch((err) => {
+exports.getProducts = async (req, res, next) => {
+  /*
+    GET request to list user products
+  */
+
+  try {
+    // fetch current active user products
+    const products = await Product.find({ userId: req.user._id });
+    res.render("admin/products", {
+      prods: products,
+      pageTitle: "Admin Products",
+      path: "/admin/products",
+      hasProducts: products.length > 0,
+      activeShop: true,
+    });
+
+  } catch (err) {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });
+  };
+
 };
