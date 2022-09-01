@@ -18,11 +18,8 @@
                                 <h2>Quantity: <%= p.quantity %>
                                 </h2>
                                 <div class="text-center">
-                                    <form action="/cart-delete-item" method="post">
-                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                        <button class="btn btn-danger" type="submit">Delete</button>
-                                        <input type="hidden" name="productId" value="<%=p.productId._id%>">
-                                    </form>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <button class="btn btn-danger" onclick="deleteCartItem(this, '<%=p.productId._id%>');">Delete</button>
                                 </div>
                             </li>
 
@@ -39,5 +36,6 @@
                         </h1>
                         <% } %>
             </main>
-
+            <script src="/js/shop.js"></script>
             <%- include('../includes/end.ejs') %>
+            
