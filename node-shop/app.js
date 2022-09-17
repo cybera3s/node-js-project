@@ -1,5 +1,7 @@
 const path = require("path");
 const fs = require("fs");
+const https = require("https");
+
 
 require("dotenv").config();
 
@@ -51,6 +53,9 @@ const store = new MongoDBStore({
 // }));
 
 const csrfProtection = csrf();
+
+// const privateKey = fs.readFileSync('server.key');
+// const certificate = fs.readFileSync('server.cert');
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -153,9 +158,14 @@ const PORT = process.env.PORT || 3000;
 mongoose
   .connect(process.env.MONGODB_URL)
   .then((result) => {
-    app.listen(PORT, () => {
-      console.log(`Listening on ${PORT}`);
-    });
+    // https
+    //   .createServer({key: privateKey, cert: certificate}, app)
+    //   .listen(PORT, () => {
+    //     console.log(`Listening on ${PORT}`);
+    //   });
+      app.listen(PORT, () => {
+        console.log(`Listening on ${PORT}`);
+      });
   })
   .catch((err) => {
     console.log(err);
