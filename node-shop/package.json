@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "complete node js guide",
   "main": "app.js",
+  "engines": {
+    "node": "14.20.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
