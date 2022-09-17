@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 
 require("dotenv").config();
 
@@ -11,7 +12,8 @@ const csrf = require("csurf");
 const flash = require("connect-flash");
 const multer = require("multer");
 const helmet = require("helmet");
-const compression = require("compression")
+const compression = require("compression");
+const morgan = require("morgan");
 
 const errorController = require("./controllers/error");
 
@@ -23,32 +25,30 @@ const store = new MongoDBStore({
   collection: "sessions",
 });
 
-const winston = require('winston')
-const expressWinston = require('express-winston');
+// const winston = require('winston')
+// const expressWinston = require('express-winston');
 
-const myFormat = winston.format.printf(({ level, message, timestamp }) => {
-  return `${level}: ${timestamp}  ${message}`;
-});
+// const myFormat = winston.format.printf(({ level, message, timestamp }) => {
+//   return `${level}: ${timestamp}  ${message}`;
+// });
 
-app.use(expressWinston.logger({
-  transports: [
-    new winston.transports.Console()
-  ],
-  format: winston.format.combine(
-    winston.format.colorize({
-      colors: { info: 'blue', error: 'red' },
-      all: true,
-    }),
-    winston.format.timestamp({
-      format: 'DD/MM/YYYY [at] HH:mm:ss'
-    }),
-    myFormat
-  ),
-  colorize: true,
-  meta: false,
-}));
-
-
+// app.use(expressWinston.logger({
+//   transports: [
+//     new winston.transports.Console()
+//   ],
+//   format: winston.format.combine(
+//     winston.format.colorize({
+//       colors: { info: 'blue', error: 'red' },
+//       all: true,
+//     }),
+//     winston.format.timestamp({
+//       format: 'DD/MM/YYYY [at] HH:mm:ss'
+//     }),
+//     myFormat
+//   ),
+//   colorize: true,
+//   meta: false,
+// }));
 
 const csrfProtection = csrf();
 
@@ -82,14 +82,22 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
 
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+);
+
 app.use(helmet());
 app.use(compression());
+app.use(morgan("combined", {stream: accessLogStream}));
 
 // Middlewares
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single("image"));
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+);
 app.use(express.static(path.join(__dirname, "public")));
-app.use('/images',express.static(path.join(__dirname, "images")));
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(
   session({
     secret: "my secret",
