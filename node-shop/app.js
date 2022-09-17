@@ -21,6 +21,33 @@ const store = new MongoDBStore({
   collection: "sessions",
 });
 
+const winston = require('winston')
+const expressWinston = require('express-winston');
+
+const myFormat = winston.format.printf(({ level, message, timestamp }) => {
+  return `${level}: ${timestamp}  ${message}`;
+});
+
+app.use(expressWinston.logger({
+  transports: [
+    new winston.transports.Console()
+  ],
+  format: winston.format.combine(
+    winston.format.colorize({
+      colors: { info: 'blue', error: 'red' },
+      all: true,
+    }),
+    winston.format.timestamp({
+      format: 'DD/MM/YYYY [at] HH:mm:ss'
+    }),
+    myFormat
+  ),
+  colorize: true,
+  meta: false,
+}));
+
+
+
 const csrfProtection = csrf();
 
 const fileStorage = multer.diskStorage({
