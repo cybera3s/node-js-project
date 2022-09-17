@@ -7,3 +7,5 @@ node-project/data/cart.json
 images
 nodemon.json
 *.log
+server.cert
+server.key
