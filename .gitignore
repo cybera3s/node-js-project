@@ -6,3 +6,4 @@ node-project/data/cart.json
 .env
 images
 nodemon.json
+*.log
