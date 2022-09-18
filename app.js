@@ -156,7 +156,7 @@ app.use((error, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 
 mongoose
-  .connect(process.env.MONGODB_URL)
+  .connect(process.env.MONGODB_ATLAS_URL)
   .then((result) => {
     // https
     //   .createServer({key: privateKey, cert: certificate}, app)
