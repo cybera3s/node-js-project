@@ -2,7 +2,6 @@ const path = require("path");
 const fs = require("fs");
 const https = require("https");
 
-
 require("dotenv").config();
 
 const express = require("express");
@@ -94,7 +93,7 @@ const accessLogStream = fs.createWriteStream(
 
 app.use(helmet());
 app.use(compression());
-app.use(morgan("combined", {stream: accessLogStream}));
+app.use(morgan("combined", { stream: accessLogStream }));
 
 // Middlewares
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -155,18 +154,30 @@ app.use((error, req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 
-mongoose
-  .connect(process.env.MONGODB_ATLAS_URL)
-  .then((result) => {
-    // https
-    //   .createServer({key: privateKey, cert: certificate}, app)
-    //   .listen(PORT, () => {
-    //     console.log(`Listening on ${PORT}`);
-    //   });
-      app.listen(PORT, () => {
-        console.log(`Listening on ${PORT}`);
-      });
-  })
-  .catch((err) => {
+async function main() {
+  try {
+
+    await mongoose.connect(process.env.MONGODB_ATLAS_URL);
+    app.listen(PORT, () => {
+      console.log(`Listening on ${PORT}`);
+    });
+
+  } catch (err) {
     console.log(err);
-  });
+  };
+}
+
+main();
+// .then((result) => {
+//   // https
+//   //   .createServer({key: privateKey, cert: certificate}, app)
+//   //   .listen(PORT, () => {
+//   //     console.log(`Listening on ${PORT}`);
+//   //   });
+//     app.listen(PORT, () => {
+//       console.log(`Listening on ${PORT}`);
+//     });
+// })
+// .catch((err) => {
+//   console.log(err);
+// });
