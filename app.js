@@ -20,9 +20,11 @@ const errorController = require("./controllers/error");
 
 const User = require("./models/user");
 
+const MONGODB_URL = `mongodb+srv://${MONGODB_ATLAS_USER}:${MONGODB_ATLAS_PASSWORD}@aiva-shop.nfxlb6u.mongodb.net/${MONGODB_ATLAS_DB_NAME}`;
+
 const app = express();
 const store = new MongoDBStore({
-  uri: process.env.MONGODB_ATLAS_URL,
+  uri: MONGODB_URL,
   collection: "sessions",
 });
 
@@ -156,28 +158,13 @@ const PORT = process.env.PORT || 3000;
 
 async function main() {
   try {
-
-    await mongoose.connect(process.env.MONGODB_ATLAS_URL);
+    await mongoose.connect(MONGODB_URL);
     app.listen(PORT, () => {
       console.log(`Listening on ${PORT}`);
     });
-
   } catch (err) {
     console.log(err);
-  };
+  }
 }
 
 main();
-// .then((result) => {
-//   // https
-//   //   .createServer({key: privateKey, cert: certificate}, app)
-//   //   .listen(PORT, () => {
-//   //     console.log(`Listening on ${PORT}`);
-//   //   });
-//     app.listen(PORT, () => {
-//       console.log(`Listening on ${PORT}`);
-//     });
-// })
-// .catch((err) => {
-//   console.log(err);
-// });
