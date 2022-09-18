@@ -22,7 +22,7 @@ const User = require("./models/user");
 
 const app = express();
 const store = new MongoDBStore({
-  uri: process.env.MONGODB_URL,
+  uri: process.env.MONGODB_ATLAS_URL,
   collection: "sessions",
 });
 
