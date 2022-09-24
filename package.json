@@ -1,7 +1,7 @@
 {
-  "name": "node-js-udemy",
+  "name": "online_shop",
   "version": "1.0.0",
-  "description": "complete node js guide",
+  "description": "Online shop sample website",
   "main": "app.js",
   "engines": {
     "node": "14.20.0"
